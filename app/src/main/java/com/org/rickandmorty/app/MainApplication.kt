@@ -7,10 +7,14 @@ import timber.log.Timber
 
 class MainApplication : Application(), BuildInfoProvider by BuildInfoProviderImpl() {
 
+    val singletonInstances by lazy { SingletonInstancesInitializer() }
+
     override fun onCreate() {
         super.onCreate()
         if (isDebug) {
             Timber.plant(RickAndMortyDebugTree)
         }
+
+        singletonInstances.init()
     }
 }

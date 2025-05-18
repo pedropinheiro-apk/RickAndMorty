@@ -1,4 +1,4 @@
-package com.org.rickandmorty
+package com.org.rickandmorty.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,19 +10,33 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.org.rickandmorty.di.ActivityScopedGraph
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.org.rickandmorty.di.Graph
+import com.org.rickandmorty.di.GraphLifecycleCollector
+import com.org.rickandmorty.di.graphViewModel
+import com.org.rickandmorty.domain.repository.AuthRepository
 import com.org.rickandmorty.ui.theme.RickAndMortyTheme
+import kotlin.getValue
 
 class MainActivity : ComponentActivity() {
 
+    private val authRepo by lazy {
+        Graph.get<AuthRepository>(key = "auth_repository")
+            ?: error("MainActivity creation failed: AuthRepository not found")
+    }
+
+    private val viewModel by graphViewModel { MainViewModel(authRepo::getSessionState) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-
-        ActivityScopedGraph
-            .init(lifecycle = lifecycle) {
-                putAll()
+        installSplashScreen().apply {
+            enableEdgeToEdge()
+            setKeepOnScreenCondition {
+                !viewModel.isAuthenticated.value
             }
+        }
+
+        GraphLifecycleCollector.init(lifecycle)
 
         setContent {
             RickAndMortyTheme {
