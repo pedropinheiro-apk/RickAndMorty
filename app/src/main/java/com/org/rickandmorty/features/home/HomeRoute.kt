@@ -63,8 +63,8 @@ private fun HomeScreen(
         columns = GridCells.Fixed(2),
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = if (isLoading) Arrangement.Center else Arrangement.spacedBy(16.dp),
+        horizontalArrangement = if (isLoading) Arrangement.Center else Arrangement.spacedBy(16.dp),
     ) {
         items(
             count = charactersState.itemCount,
@@ -75,7 +75,6 @@ private fun HomeScreen(
 
             if (character != null) {
                 CharacterItem(
-                    modifier = Modifier.fillMaxSize(0.15f),
                     character = character,
                     onTextPaletteReady = palette::setTextPalette,
                     onPaletteReady = palette::setBackgroundPalette,
@@ -109,6 +108,6 @@ private fun HomeScreen(
     }
 }
 
-private val emptyLazyPagingItems: LazyPagingItems<Character>
+val emptyLazyPagingItems: LazyPagingItems<Character>
     @Composable
     get() = flowOf(PagingData.empty<Character>()).collectAsLazyPagingItems()

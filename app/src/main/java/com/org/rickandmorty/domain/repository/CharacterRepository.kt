@@ -6,5 +6,6 @@ import com.org.rickandmorty.domain.model.Character
 
 interface CharacterRepository {
     fun getCharacterPager(): Flow<PagingData<Character>>
+    fun getFavoriteCharactersPager(): Flow<PagingData<Character>>
     suspend fun toggleCharacterFavorite(id: Long): Result<Unit>
 }

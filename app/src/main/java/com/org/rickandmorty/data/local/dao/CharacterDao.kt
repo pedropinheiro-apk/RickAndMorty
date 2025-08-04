@@ -23,6 +23,16 @@ interface CharacterDao {
     )
     fun getCharactersWithFavorites(): PagingSource<Int, CharacterWithFavorite>
 
+    @Query(
+        """
+        SELECT c.*, 
+        1 AS isFavorite
+        FROM characters c
+        INNER JOIN favorites f ON c.id = f.id
+        """
+    )
+    fun getFavoriteCharacters(): PagingSource<Int, CharacterWithFavorite>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(characters: List<CharacterEntity>)
 

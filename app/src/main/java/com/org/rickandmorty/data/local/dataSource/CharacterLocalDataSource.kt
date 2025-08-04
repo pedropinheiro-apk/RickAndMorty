@@ -8,6 +8,7 @@ import javax.inject.Inject
 
 interface CharacterLocalDataSource {
     fun getCharactersPagingSource(): PagingSource<Int, CharacterWithFavorite>
+    fun getFavoriteCharactersPagingSource(): PagingSource<Int, CharacterWithFavorite>
     suspend fun insertCharacters(characters: List<CharacterEntity>)
     suspend fun clearCharacters()
 }
@@ -16,9 +17,11 @@ class CharacterLocalDataSourceImpl @Inject constructor(
     private val characterDao: CharacterDao,
 ) : CharacterLocalDataSource {
 
+    override suspend fun clearCharacters() = characterDao.clearAll()
+
     override fun getCharactersPagingSource() = characterDao.getCharactersWithFavorites()
 
-    override suspend fun clearCharacters() = characterDao.clearAll()
+    override fun getFavoriteCharactersPagingSource() = characterDao.getFavoriteCharacters()
 
     override suspend fun insertCharacters(
         characters: List<CharacterEntity>,

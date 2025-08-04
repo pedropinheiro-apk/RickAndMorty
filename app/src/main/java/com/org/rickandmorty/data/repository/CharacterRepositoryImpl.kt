@@ -61,6 +61,19 @@ class CharacterRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getFavoriteCharactersPager(): Flow<PagingData<Character>> {
+        val pagingSourceFactory = { localDataSource.getFavoriteCharactersPagingSource() }
+
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = pagingSourceFactory
+        ).flow.map { pagingData ->
+            pagingData.map {
+                it.character.toCharacter().copy(isFavorite = true)
+            }
+        }
+    }
+
     override suspend fun toggleCharacterFavorite(id: Long): Result<Unit> {
         return try {
             favoriteLocalDataSource.toggleCharacterFavorite(id)
