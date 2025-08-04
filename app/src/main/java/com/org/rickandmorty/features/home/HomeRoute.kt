@@ -15,6 +15,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.org.rickandmorty.domain.model.Character
 import com.org.rickandmorty.utils.isLoading
 import com.org.rickandmorty.utils.isLoadingMore
@@ -46,17 +48,10 @@ private fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = if (isLoading) Arrangement.Center else Arrangement.Top,
     ) {
-        if (isLoading) {
-            item {
-                LoadingIndicator()
-            }
-
-            return@LazyColumn
-        }
-
         items(
             count = charactersState.itemCount,
-            key = { index -> charactersState.peek(index)?.id ?: index }
+            key = charactersState.itemKey { it.id },
+            contentType = charactersState.itemContentType { "characters" },
         ) { index ->
             val char = charactersState[index]
 
@@ -65,7 +60,7 @@ private fun HomeScreen(
             }
         }
 
-        if (isLoadingMore) {
+        if (isLoading || isLoadingMore) {
             item {
                 LoadingIndicator()
             }

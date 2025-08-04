@@ -28,9 +28,9 @@ class CharacterRepositoryImpl @Inject constructor(
     private val pagingConfig by lazy {
         PagingConfig(
             pageSize = 20,
-            prefetchDistance = 5,
-            initialLoadSize = 20,
-            enablePlaceholders = false
+            initialLoadSize = 60,
+            prefetchDistance = 10,
+            enablePlaceholders = false,
         )
     }
 
