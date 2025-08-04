@@ -1,6 +1,8 @@
 package com.org.rickandmorty.di
 
 import com.org.rickandmorty.domain.repository.AuthRepository
+import com.org.rickandmorty.domain.repository.CharacterRepository
+import com.org.rickandmorty.domain.usecase.GetCharactersPagerUseCase
 import com.org.rickandmorty.domain.usecase.GetSessionStateUseCase
 import dagger.Module
 import dagger.Provides
@@ -14,7 +16,10 @@ object UseCaseModule {
     @Provides
     fun provideGetSessionStateUseCase(
         repository: AuthRepository
-    ): GetSessionStateUseCase {
-        return GetSessionStateUseCase(repository::getSessionState)
-    }
+    ): GetSessionStateUseCase = GetSessionStateUseCase(repository::getSessionState)
+
+    @Provides
+    fun provideGetCharacterPagerUseCase(
+        repository: CharacterRepository
+    ): GetCharactersPagerUseCase = GetCharactersPagerUseCase(repository::getCharacterPager)
 }

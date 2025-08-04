@@ -1,0 +1,9 @@
+package com.org.rickandmorty.domain.repository
+
+import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
+import com.org.rickandmorty.domain.model.Character
+
+interface CharacterRepository {
+    fun getCharacterPager(): Flow<PagingData<Character>>
+}
