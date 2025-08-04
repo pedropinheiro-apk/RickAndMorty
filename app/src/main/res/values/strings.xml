@@ -2,4 +2,8 @@
     <string name="app_name">RickAndMorty</string>
     <string name="home">Home</string>
     <string name="favorites">Favorites</string>
+    <string name="status">Status: %1$s</string>
+    <string name="gender">Gender: %1$s</string>
+    <string name="origin">Origin: %1$s</string>
+    <string name="current_location">Current Location: %1$s</string>
 </resources>

@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -31,6 +33,7 @@ import coil3.request.crossfade
 import coil3.request.transformations
 import coil3.size.Size
 import coil3.transform.Transformation
+import com.org.rickandmorty.R
 import com.org.rickandmorty.domain.model.Character
 
 @Composable
@@ -78,11 +81,7 @@ fun CharacterDetailsScreen(
             ).build(),
     )
 
-    Box(
-        modifier = modifier
-            .fillMaxWidth(0.8f)
-            .fillMaxHeight(0.6f),
-    ) {
+    Box(modifier = modifier) {
         Card(
             modifier = Modifier.aspectRatio(2 / 3f),
             colors = CardDefaults.cardColors(
@@ -91,7 +90,7 @@ fun CharacterDetailsScreen(
         ) {
             Column(
                 verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally,
+                horizontalAlignment = Alignment.Start,
             ) {
                 Image(
                     modifier = Modifier.fillMaxWidth(),
@@ -103,6 +102,7 @@ fun CharacterDetailsScreen(
                 Spacer(Modifier.height(8.dp))
 
                 Text(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
                     maxLines = 1,
                     fontSize = 20.sp,
                     text = character?.name.orEmpty(),
@@ -111,14 +111,37 @@ fun CharacterDetailsScreen(
                     overflow = TextOverflow.Ellipsis,
                 )
 
-                Text(
-                    text = character?.status.orEmpty(),
-                    color = Color(textPalette ?: 0)
+                val detailsTextStyle = TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color(textPalette ?: 0),
                 )
 
                 Text(
-                    text = character?.gender.orEmpty(),
-                    color = Color(textPalette ?: 0)
+                    modifier = Modifier.offset(x = 8.dp),
+                    style = detailsTextStyle,
+                    text = stringResource(R.string.status, character?.status.orEmpty()),
+                )
+
+                Text(
+                    modifier = Modifier.offset(x = 8.dp),
+                    style = detailsTextStyle,
+                    text = stringResource(R.string.gender, character?.gender.orEmpty()),
+                )
+
+                Text(
+                    modifier = Modifier.offset(x = 8.dp),
+                    style = detailsTextStyle,
+                    text = stringResource(R.string.origin, character?.origin?.name.orEmpty()),
+                )
+
+                Text(
+                    modifier = Modifier.offset(x = 8.dp),
+                    style = detailsTextStyle,
+                    text = stringResource(
+                        R.string.current_location,
+                        character?.location?.name.orEmpty()
+                    )
                 )
             }
         }
