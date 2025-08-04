@@ -39,7 +39,7 @@ object RemoteModule {
         return Retrofit.Builder()
             .client(okHttpClient)
             .addConverterFactory(Json.asConverterFactory(contentType))
-            .baseUrl("https://rickandmortyapi.com/api")
+            .baseUrl("https://rickandmortyapi.com/api/")
             .build()
     }
 }
