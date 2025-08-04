@@ -38,6 +38,7 @@ fun CharacterItem(
     textPalette: Int? = null,
     backgroundPalette: Int? = null,
     context: Context = LocalContext.current,
+    onClick: () -> Unit = {},
     onPaletteReady: (Long, Int) -> Unit = { _, _ -> },
     onTextPaletteReady: (Long, Int) -> Unit = { _, _ -> },
 ) {
@@ -71,7 +72,8 @@ fun CharacterItem(
         modifier = modifier.aspectRatio(2 / 3f),
         colors = CardDefaults.cardColors(
             containerColor = Color(backgroundPalette ?: 0),
-        )
+        ),
+        onClick = onClick,
     ) {
         Column(
             verticalArrangement = Arrangement.Top,

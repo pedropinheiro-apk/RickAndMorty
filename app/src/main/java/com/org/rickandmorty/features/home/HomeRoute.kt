@@ -10,6 +10,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,6 +23,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.org.rickandmorty.domain.model.Character
+import com.org.rickandmorty.features.characterDetails.CharacterDetailsRoute
 import com.org.rickandmorty.features.home.ui.CharacterItem
 import com.org.rickandmorty.features.home.ui.rememberPaletteCollection
 import com.org.rickandmorty.utils.isLoading
@@ -28,7 +33,7 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 fun HomeRoute(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val charactersState = viewModel.charactersPager.collectAsLazyPagingItems()
 
@@ -41,8 +46,13 @@ fun HomeRoute(
 @Composable
 private fun HomeScreen(
     modifier: Modifier = Modifier,
-    charactersState: LazyPagingItems<Character> = flowOf(PagingData.empty<Character>()).collectAsLazyPagingItems(),
+    charactersState: LazyPagingItems<Character> = emptyLazyPagingItems,
 ) {
+    val shouldShowDetails = remember { mutableStateOf(false) }
+    var textPalette by remember { mutableStateOf<Int?>(null) }
+    var backgroundPalette by remember { mutableStateOf<Int?>(null) }
+    var selectedCharacter by remember { mutableStateOf<Character?>(null) }
+
     val palette = rememberPaletteCollection()
     val isLoading = charactersState.isLoading
     val isLoadingMore = charactersState.isLoadingMore
@@ -66,9 +76,15 @@ private fun HomeScreen(
                     modifier = Modifier.fillMaxSize(0.15f),
                     character = character,
                     onTextPaletteReady = palette::setTextPalette,
-                    textPalette = palette.getTextPalette(character.id),
                     onPaletteReady = palette::setBackgroundPalette,
+                    textPalette = palette.getTextPalette(character.id),
                     backgroundPalette = palette.getBackgroundPalette(character.id),
+                    onClick = {
+                        selectedCharacter = character
+                        textPalette = palette.getTextPalette(character.id)
+                        backgroundPalette = palette.getBackgroundPalette(character.id)
+                        shouldShowDetails.value = true
+                    }
                 )
             }
         }
@@ -79,4 +95,17 @@ private fun HomeScreen(
             }
         }
     }
+
+    if (shouldShowDetails.value) {
+        CharacterDetailsRoute(
+            textPalette = textPalette,
+            character = selectedCharacter,
+            backgroundPalette = backgroundPalette,
+            onDismissRequest = { shouldShowDetails.value = false },
+        )
+    }
 }
+
+private val emptyLazyPagingItems: LazyPagingItems<Character>
+    @Composable
+    get() = flowOf(PagingData.empty<Character>()).collectAsLazyPagingItems()

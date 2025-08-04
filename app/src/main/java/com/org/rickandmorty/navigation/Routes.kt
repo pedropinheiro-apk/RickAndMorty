@@ -9,7 +9,4 @@ sealed interface Routes : NavKey {
 
     @Serializable
     data object Favorites : Routes
-
-    @Serializable
-    data class CharacterDetail(val id: Int) : Routes
 }

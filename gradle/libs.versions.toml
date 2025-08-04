@@ -23,6 +23,7 @@ timber = "5.0.1"
 coreSplashscreen = "1.0.1"
 nav3Core = "1.0.0-alpha06"
 paletteKtx = "1.0.0"
+animationCompose = "1.8.3"
 
 [libraries]
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
@@ -59,6 +60,7 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
 androidx-palette-ktx = { group = "androidx.palette", name = "palette-ktx", version.ref = "paletteKtx" }
+androidx-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "animationCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
