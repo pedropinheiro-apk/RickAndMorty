@@ -13,4 +13,5 @@ data class Character(
     val type: String,
     val url: String,
     val status: String,
+    val isFavorite: Boolean = false,
 )

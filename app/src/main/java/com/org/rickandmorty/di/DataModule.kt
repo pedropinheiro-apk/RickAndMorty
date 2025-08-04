@@ -2,6 +2,8 @@ package com.org.rickandmorty.di
 
 import com.org.rickandmorty.data.local.dataSource.CharacterLocalDataSource
 import com.org.rickandmorty.data.local.dataSource.CharacterLocalDataSourceImpl
+import com.org.rickandmorty.data.local.dataSource.FavoritesLocalDataSource
+import com.org.rickandmorty.data.local.dataSource.FavoritesLocalDataSourceImpl
 import com.org.rickandmorty.data.repository.AlwaysAuthenticatedAuthRepositoryImpl
 import com.org.rickandmorty.data.repository.CharacterRepositoryImpl
 import com.org.rickandmorty.domain.repository.AuthRepository
@@ -33,4 +35,10 @@ abstract class DataModule {
     internal abstract fun bindsCharacterLocalDataSource(
         characterLocalDataSource: CharacterLocalDataSourceImpl,
     ): CharacterLocalDataSource
+
+    @Binds
+    @Singleton
+    internal abstract fun bindsFavoritesLocalDataSource(
+        favoritesLocalDataSourceImpl: FavoritesLocalDataSourceImpl,
+    ): FavoritesLocalDataSource
 }

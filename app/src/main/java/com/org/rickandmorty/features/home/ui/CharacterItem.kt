@@ -4,13 +4,20 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -40,6 +47,7 @@ fun CharacterItem(
     context: Context = LocalContext.current,
     onClick: () -> Unit = {},
     onPaletteReady: (Long, Int) -> Unit = { _, _ -> },
+    onToggleFavoriteClicked: () -> Unit = { },
     onTextPaletteReady: (Long, Int) -> Unit = { _, _ -> },
 ) {
     val painter = rememberAsyncImagePainter(
@@ -75,37 +83,59 @@ fun CharacterItem(
         ),
         onClick = onClick,
     ) {
-        Column(
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Image(
-                modifier = Modifier.fillMaxWidth(),
-                painter = painter,
-                contentScale = ContentScale.FillWidth,
-                contentDescription = character.name,
-            )
+        Box {
+            Column(
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Image(
+                    modifier = Modifier.fillMaxWidth(),
+                    painter = painter,
+                    contentScale = ContentScale.FillWidth,
+                    contentDescription = character.name,
+                )
 
-            Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(8.dp))
 
-            Text(
-                maxLines = 1,
-                fontSize = 20.sp,
-                text = character.name,
-                fontWeight = FontWeight.Bold,
-                color = Color(textPalette ?: 0),
-                overflow = TextOverflow.Ellipsis,
-            )
+                Text(
+                    maxLines = 1,
+                    fontSize = 20.sp,
+                    text = character.name,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(textPalette ?: 0),
+                    overflow = TextOverflow.Ellipsis,
+                )
 
-            Text(
-                text = character.status,
-                color = Color(textPalette ?: 0)
-            )
+                Text(
+                    text = character.status,
+                    color = Color(textPalette ?: 0)
+                )
 
-            Text(
-                text = character.gender,
-                color = Color(textPalette ?: 0)
-            )
+                Text(
+                    text = character.gender,
+                    color = Color(textPalette ?: 0)
+                )
+            }
+
+            val icon = if (character.isFavorite) {
+                Icons.Filled.Favorite
+            } else {
+                Icons.Filled.FavoriteBorder
+            }
+
+            IconButton(
+                modifier = Modifier.align(Alignment.TopEnd),
+                onClick = onToggleFavoriteClicked,
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = Color.White.copy(alpha = 0.5f)
+                )
+            ) {
+                Icon(
+                    contentDescription = null,
+                    imageVector = icon,
+                    tint = if (character.isFavorite) Color.Red else Color(textPalette ?: 0),
+                )
+            }
         }
     }
 }

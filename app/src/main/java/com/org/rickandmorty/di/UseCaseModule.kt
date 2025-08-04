@@ -4,6 +4,7 @@ import com.org.rickandmorty.domain.repository.AuthRepository
 import com.org.rickandmorty.domain.repository.CharacterRepository
 import com.org.rickandmorty.domain.usecase.GetCharactersPagerUseCase
 import com.org.rickandmorty.domain.usecase.GetSessionStateUseCase
+import com.org.rickandmorty.domain.usecase.ToggleCharacterFavoriteUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,4 +23,10 @@ object UseCaseModule {
     fun provideGetCharacterPagerUseCase(
         repository: CharacterRepository
     ): GetCharactersPagerUseCase = GetCharactersPagerUseCase(repository::getCharacterPager)
+
+    @Provides
+    fun provideToggleCharacterFavoriteUseCase(
+        repository: CharacterRepository
+    ): ToggleCharacterFavoriteUseCase =
+        ToggleCharacterFavoriteUseCase(repository::toggleCharacterFavorite)
 }

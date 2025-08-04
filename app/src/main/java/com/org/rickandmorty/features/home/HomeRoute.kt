@@ -40,6 +40,7 @@ fun HomeRoute(
     HomeScreen(
         modifier = modifier,
         charactersState = charactersState,
+        onToggleFavoriteClicked = viewModel::toggleFavorite,
     )
 }
 
@@ -47,6 +48,7 @@ fun HomeRoute(
 private fun HomeScreen(
     modifier: Modifier = Modifier,
     charactersState: LazyPagingItems<Character> = emptyLazyPagingItems,
+    onToggleFavoriteClicked: (Character) -> Unit = { },
 ) {
     val shouldShowDetails = remember { mutableStateOf(false) }
     var textPalette by remember { mutableStateOf<Int?>(null) }
@@ -79,12 +81,13 @@ private fun HomeScreen(
                     onPaletteReady = palette::setBackgroundPalette,
                     textPalette = palette.getTextPalette(character.id),
                     backgroundPalette = palette.getBackgroundPalette(character.id),
+                    onToggleFavoriteClicked = { onToggleFavoriteClicked(character) },
                     onClick = {
                         selectedCharacter = character
                         textPalette = palette.getTextPalette(character.id)
                         backgroundPalette = palette.getBackgroundPalette(character.id)
                         shouldShowDetails.value = true
-                    }
+                    },
                 )
             }
         }

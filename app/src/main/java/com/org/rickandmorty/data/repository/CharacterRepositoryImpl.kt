@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalPagingApi::class)
+@file:OptIn(ExperimentalPagingApi::class, ExperimentalCoroutinesApi::class)
 
 package com.org.rickandmorty.data.repository
 
@@ -9,13 +9,16 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.org.rickandmorty.data.local.dao.CharacterRemoteKeysDao
 import com.org.rickandmorty.data.local.dataSource.CharacterLocalDataSource
+import com.org.rickandmorty.data.local.dataSource.FavoritesLocalDataSource
 import com.org.rickandmorty.data.local.database.RickAndMortyDatabase
 import com.org.rickandmorty.data.local.mediator.CharacterRemoteMediator
 import com.org.rickandmorty.data.remote.CharacterApi
 import com.org.rickandmorty.domain.model.Character
 import com.org.rickandmorty.domain.repository.CharacterRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import okio.IOException
 import javax.inject.Inject
 
 class CharacterRepositoryImpl @Inject constructor(
@@ -23,6 +26,7 @@ class CharacterRepositoryImpl @Inject constructor(
     private val database: RickAndMortyDatabase,
     private val remoteKeysDao: CharacterRemoteKeysDao,
     private val localDataSource: CharacterLocalDataSource,
+    private val favoriteLocalDataSource: FavoritesLocalDataSource,
 ) : CharacterRepository {
 
     private val pagingConfig by lazy {
@@ -51,7 +55,18 @@ class CharacterRepositoryImpl @Inject constructor(
             remoteMediator = mediator,
             pagingSourceFactory = pagingSourceFactory,
         ).flow.map { pagingData ->
-            pagingData.map { it.toCharacter() }
+            pagingData.map {
+                it.character.toCharacter().copy(isFavorite = it.isFavorite)
+            }
+        }
+    }
+
+    override suspend fun toggleCharacterFavorite(id: Long): Result<Unit> {
+        return try {
+            favoriteLocalDataSource.toggleCharacterFavorite(id)
+            Result.success(Unit)
+        } catch (ex: IOException) {
+            Result.failure(ex)
         }
     }
 }

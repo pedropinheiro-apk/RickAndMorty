@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.org.rickandmorty.data.local.dao.CharacterDao
 import com.org.rickandmorty.data.local.dao.CharacterRemoteKeysDao
+import com.org.rickandmorty.data.local.dao.FavoritesDao
 import com.org.rickandmorty.data.local.database.RickAndMortyDatabase
 import dagger.Module
 import dagger.Provides
@@ -30,6 +31,12 @@ object DatabaseModule {
     fun provideCharactersDao(
         database: RickAndMortyDatabase,
     ): CharacterDao = database.characterDao()
+
+    @Provides
+    @Singleton
+    fun provideFavoritesDao(
+        database: RickAndMortyDatabase,
+    ): FavoritesDao = database.favoritesDao()
 
     @Provides
     @Singleton

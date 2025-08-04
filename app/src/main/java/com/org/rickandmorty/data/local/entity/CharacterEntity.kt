@@ -53,6 +53,6 @@ data class CharacterEntity(
         created = created.orEmpty(),
         episode = episode?.split(",").orEmpty(),
         origin = Location(name = origin.orEmpty(), url = originUrl.orEmpty()),
-        location = Location(name = location.orEmpty(), url = locationUrl.orEmpty())
+        location = Location(name = location.orEmpty(), url = locationUrl.orEmpty()),
     )
 }
