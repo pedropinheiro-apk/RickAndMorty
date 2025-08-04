@@ -44,10 +44,13 @@ android {
 }
 
 dependencies {
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.coil.compose)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.material3.android)
     implementation(libs.retrofit)
+    implementation(libs.androidx.palette.ktx)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.paging)
